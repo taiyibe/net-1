@@ -8,14 +8,30 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) {
+        String city = null;
         try (ServerSocket serverSocket = new ServerSocket(26525);) {
-            try (Socket clienSocket = serverSocket.accept();
-                 PrintWriter out = new PrintWriter(clienSocket.getOutputStream(), true);
-                 BufferedReader in = new BufferedReader(new InputStreamReader(clienSocket.getInputStream()));
-            ) {
-                System.out.println("New connection accepted");
-                final String name = in.readLine();
-                System.out.println(String.format("Hi %s, your port is %d", name, clienSocket.getPort()));
+            while(true){
+                try (Socket clienSocket = serverSocket.accept();
+                     PrintWriter out = new PrintWriter(clienSocket.getOutputStream(), true);
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clienSocket.getInputStream()));
+                ) {
+                    if (city == null){
+                        out.println("???");
+                        city = in.readLine();
+                        out.println("OK");
+                    }
+                    else {
+                        out.println(city);
+                        String buf = in.readLine();
+                        if (city.charAt(city.length() - 1) == buf.charAt(0)){
+                            city = buf;
+                            out.println("OK");
+                        }
+                        else{
+                            out.println("NOT OK");
+                        }
+                    }
+                }
             }
         }
         catch(IOException e){

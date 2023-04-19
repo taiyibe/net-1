@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
@@ -12,9 +13,11 @@ public class Client {
             try (PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
                  BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             ) {
-                System.out.println("Connected");
-                out.println("Student");
-                sock.close();
+                Scanner scanner = new Scanner(System.in);
+                System.out.println(in.readLine());
+                out.println(scanner.nextLine());
+                System.out.println(in.readLine());
+                scanner.close();
             }
         }
         catch (UnknownHostException e){
